@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>东宁的网站</title>
+  
+  <subtitle>吾生而有崖，而知也无涯！</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://blog.fleetingtimer.top/"/>
+  <updated>2019-06-06T16:53:36.632Z</updated>
+  <id>http://blog.fleetingtimer.top/</id>
+  
+  <author>
+    <name>fleetingtimer</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://blog.fleetingtimer.top/2019/06/06/hello-world/"/>
+    <id>http://blog.fleetingtimer.top/2019/06/06/hello-world/</id>
+    <published>2019-06-06T06:46:03.515Z</published>
+    <updated>2019-06-06T16:53:36.632Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a
+        
+      
+    
+    </summary>
+    
+      <category term="Dairy" scheme="http://blog.fleetingtimer.top/categories/Dairy/"/>
+    
+    
+      <category term="clang" scheme="http://blog.fleetingtimer.top/tags/clang/"/>
+    
+  </entry>
+  
+</feed>
