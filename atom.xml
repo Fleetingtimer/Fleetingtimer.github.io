@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.fleetingtimer.top/"/>
-  <updated>2019-06-18T17:49:43.416Z</updated>
+  <updated>2019-06-18T17:52:50.748Z</updated>
   <id>http://blog.fleetingtimer.top/</id>
   
   <author>
@@ -17,22 +17,15 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>GC-brief-intro</title>
+    <title>详解GC-先导篇</title>
     <link href="http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/"/>
     <id>http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/</id>
     <published>2019-06-18T17:39:33.000Z</published>
-    <updated>2019-06-18T17:49:43.416Z</updated>
+    <updated>2019-06-18T17:52:50.748Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;p&gt;这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…&lt;/p&gt;
-&lt;h1 id=&quot;GC机制-（先导篇）&quot;&gt;&lt;a
-        
-      
+      &lt;p&gt;这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…&lt;/p&gt;
     
     </summary>
     

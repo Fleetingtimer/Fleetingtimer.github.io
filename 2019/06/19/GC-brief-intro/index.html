@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估… GC机制 （先导篇）GC的基础概念GC的定义 GC是Garbage Collection的简称，中文我们称之为垃圾回收  ​    在GC中，我们把程序中不用的内存空间称之为垃圾 GC的简介及历史​    对于大多数">
+  <meta name="description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…">
 <meta name="keywords" content="GC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GC-brief-intro">
+<meta property="og:title" content="详解GC-先导篇">
 <meta property="og:url" content="http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/index.html">
 <meta property="og:site_name" content="Perfect Blog">
-<meta property="og:description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估… GC机制 （先导篇）GC的基础概念GC的定义 GC是Garbage Collection的简称，中文我们称之为垃圾回收  ​    在GC中，我们把程序中不用的内存空间称之为垃圾 GC的简介及历史​    对于大多数">
+<meta property="og:description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-18T17:49:43.416Z">
+<meta property="og:updated_time" content="2019-06-18T17:52:50.748Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GC-brief-intro">
-<meta name="twitter:description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估… GC机制 （先导篇）GC的基础概念GC的定义 GC是Garbage Collection的简称，中文我们称之为垃圾回收  ​    在GC中，我们把程序中不用的内存空间称之为垃圾 GC的简介及历史​    对于大多数">
+<meta name="twitter:title" content="详解GC-先导篇">
+<meta name="twitter:description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…">
 
 
 
@@ -127,7 +127,7 @@
   };
 </script>
 
-  <title>GC-brief-intro | Perfect Blog</title>
+  <title>详解GC-先导篇 | Perfect Blog</title>
   
 
 
@@ -459,7 +459,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">GC-brief-intro
+          <h2 class="post-title" itemprop="name headline">详解GC-先导篇
 
               
             
@@ -485,7 +485,7 @@
                 
               
 
-              <time title="Created: 2019-06-19 01:39:33 / Modified: 01:49:43" itemprop="dateCreated datePublished" datetime="2019-06-19T01:39:33+08:00">2019-06-19</time>
+              <time title="Created: 2019-06-19 01:39:33 / Modified: 01:52:50" itemprop="dateCreated datePublished" datetime="2019-06-19T01:39:33+08:00">2019-06-19</time>
             
 
             
@@ -535,7 +535,7 @@
 
           
           
-            <span id="/2019/06/19/GC-brief-intro/" class="leancloud_visitors" data-flag-title="GC-brief-intro">
+            <span id="/2019/06/19/GC-brief-intro/" class="leancloud_visitors" data-flag-title="详解GC-先导篇">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -579,6 +579,7 @@
 
       
         <p>这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…</p>
+<a id="more"></a>
 <h1 id="GC机制-（先导篇）"><a href="#GC机制-（先导篇）" class="headerlink" title="GC机制 （先导篇）"></a>GC机制 （先导篇）</h1><h2 id="GC的基础概念"><a href="#GC的基础概念" class="headerlink" title="GC的基础概念"></a>GC的基础概念</h2><h3 id="GC的定义"><a href="#GC的定义" class="headerlink" title="GC的定义"></a>GC的定义</h3><blockquote>
 <p>GC是Garbage Collection的简称，中文我们称之为垃圾回收</p>
 </blockquote>
@@ -1047,7 +1048,7 @@
   var disqus_config = function() {
     this.page.url = "http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/";
     this.page.identifier = "2019/06/19/GC-brief-intro/";
-    this.page.title = 'GC-brief-intro';
+    this.page.title = '详解GC-先导篇';
     };
   function loadComments() {
     var d = document, s = d.createElement('script');
