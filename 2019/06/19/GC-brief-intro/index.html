@@ -96,17 +96,18 @@
 
 
 
-  <meta name="description" content="天地不仁，以万物为刍狗！">
-<meta name="keywords" content="Computer Science">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Perfect Blog">
-<meta property="og:url" content="http://blog.fleetingtimer.top/tags/PS3/index.html">
+  <meta name="description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估… GC机制 （先导篇）GC的基础概念GC的定义 GC是Garbage Collection的简称，中文我们称之为垃圾回收  ​    在GC中，我们把程序中不用的内存空间称之为垃圾 GC的简介及历史​    对于大多数">
+<meta name="keywords" content="GC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GC-brief-intro">
+<meta property="og:url" content="http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/index.html">
 <meta property="og:site_name" content="Perfect Blog">
-<meta property="og:description" content="天地不仁，以万物为刍狗！">
+<meta property="og:description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估… GC机制 （先导篇）GC的基础概念GC的定义 GC是Garbage Collection的简称，中文我们称之为垃圾回收  ​    在GC中，我们把程序中不用的内存空间称之为垃圾 GC的简介及历史​    对于大多数">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-06-18T17:49:43.416Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Perfect Blog">
-<meta name="twitter:description" content="天地不仁，以万物为刍狗！">
+<meta name="twitter:title" content="GC-brief-intro">
+<meta name="twitter:description" content="这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估… GC机制 （先导篇）GC的基础概念GC的定义 GC是Garbage Collection的简称，中文我们称之为垃圾回收  ​    在GC中，我们把程序中不用的内存空间称之为垃圾 GC的简介及历史​    对于大多数">
 
 
 
@@ -116,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="http://blog.fleetingtimer.top/tags/PS3/">
+  <link rel="canonical" href="http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/">
 
 
 
@@ -126,7 +127,7 @@
   };
 </script>
 
-  <title>Tag: PS3 | Perfect Blog</title>
+  <title>GC-brief-intro | Perfect Blog</title>
   
 
 
@@ -185,7 +186,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -265,7 +266,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -277,7 +278,7 @@
       
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags<span class="badge">2</span></a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Tags<span class="badge">1</span></a>
 
   </li>
         
@@ -315,7 +316,7 @@
       
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">1</span></a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives<span class="badge">2</span></a>
 
   </li>
         
@@ -421,89 +422,283 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h2>PS3<small>Tag</small>
-        </h2>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fleetingtimer">
+      <meta itemprop="description" content="天地不仁，以万物为刍狗！">
+      <meta itemprop="image" content="/images/icons-user.svg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Perfect Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2019/06/06/hello-world/" itemprop="url">
-            
-              <span itemprop="name">Hello World</span>
-            
-          </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">GC-brief-intro
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-06-06T14:46:03+08:00" content="2019-06-06">
-          06-06
-        </time>
-      </div>
+              
+            
+          </h2>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-06-19 01:39:33 / Modified: 01:49:43" itemprop="dateCreated datePublished" datetime="2019-06-19T01:39:33+08:00">2019-06-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Basic/" itemprop="url" rel="index"><span itemprop="name">Basic</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">Comments: </span>
+                <a href="/2019/06/19/GC-brief-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/19/GC-brief-intro/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/06/19/GC-brief-intro/" class="leancloud_visitors" data-flag-title="GC-brief-intro">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Views: </span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             Views:  
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span id="busuanzi_value_page_pv"></span>次阅读
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…</p>
+<h1 id="GC机制-（先导篇）"><a href="#GC机制-（先导篇）" class="headerlink" title="GC机制 （先导篇）"></a>GC机制 （先导篇）</h1><h2 id="GC的基础概念"><a href="#GC的基础概念" class="headerlink" title="GC的基础概念"></a>GC的基础概念</h2><h3 id="GC的定义"><a href="#GC的定义" class="headerlink" title="GC的定义"></a>GC的定义</h3><blockquote>
+<p>GC是Garbage Collection的简称，中文我们称之为垃圾回收</p>
+</blockquote>
+<p>​    在GC中，我们把程序中不用的内存空间称之为垃圾</p>
+<h3 id="GC的简介及历史"><a href="#GC的简介及历史" class="headerlink" title="GC的简介及历史"></a>GC的简介及历史</h3><p>​    对于大多数编程语言，已经内置了垃圾回收机制（比如Java，JavaScript，Python），比较早期的编程语言比如C lang 和C plus 这两门语言需要编程人员进行内存管理，即需要显式进行内存的申请及手动的内存销毁。</p>
+<p>​    GC这一概念最早由Lisp之父John McCarthy在1960年在论文中提出，这篇论文主要设计到后面要描述的GC算法-标记清除算法，后续其它计算机人员又相继提出了引用计数算法，GC复制算法。之后的几十年到当代为人所知的算法，不过都是前面三种GC算法的组合应用衍生出的产物而已。目前主要介绍JS中最常用的两种GC算法</p>
+<h3 id="GC的任务"><a href="#GC的任务" class="headerlink" title="GC的任务"></a>GC的任务</h3><ol>
+<li>找到内存空间中的垃圾</li>
+<li>回收垃圾，让内存空间重新得到利用</li>
+</ol>
+<h3 id="GC的优点"><a href="#GC的优点" class="headerlink" title="GC的优点"></a>GC的优点</h3><ul>
+<li><p>程序员无需手动进行内存管理，可以集中精力于编程工作</p>
+</li>
+<li><p>减少与内存相关Bug的出现（内存泄漏，垂悬指针）</p>
+</li>
+</ul>
+<h2 id="JS常用的GC算法"><a href="#JS常用的GC算法" class="headerlink" title="JS常用的GC算法"></a>JS常用的GC算法</h2><h3 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h3><p>JavaScript中最常用的垃圾收集方式就是标记清除。</p>
+<p>当变量进入环境时（如函数中某个变量的声明），就将此变量标记为进入环境，当变量离开环境（如函数执行完毕），就将变量标记为离开环境。变量的具体标记方法在后续的文章会进行详细介绍，此处不必关注具体的标记方式。</p>
+<p>JS中垃圾收集器会在运行时给内存中所有的变量进行标记，然后，它会去掉环境中的变量以及被环境中的变量引用的变量的标记，并在此之后加上被加上标记的变量，把这些视为准备删除的变量，然后垃圾收集器完成内存清除工作</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ol>
+<li>效率问题，标记和清除过程的效率都不高</li>
+<li>空间问题，会产生大量不连续的内存碎片，导致当程序需要更大的内存空间时，不得不提前触发下一次垃圾回收操作</li>
+</ol>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>Javascript中另一种不常见的垃圾收集策略叫做引用计数算法。</p>
+<p>引用计数，顾名思义，跟踪记录每个值的被引用次数。例如将一个引用数据类型的值赋值给一个变量，则这个值的引用次数就为1，当把这个值赋给其它更多的变量时，值的引用次数依次增加，同时对于这个值的引用的变量取得另一个引用的值，当前这个值引用次数减1，当某个值的引用次数为0时，说明在内存中没有变量可以访问到这块内存空间的值，当垃圾收集器下次运行的时候，就会引用次数为0的值内存空间进行释放。</p>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>引用计数算法在提出之后，后续有学者指出其存在一定的缺点，即它无法回收循环引用</p>
+<p><strong>什么是循环引用？</strong>，请看下面示例</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> objectA = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">  <span class="keyword">const</span> object B =  <span class="keyword">new</span> <span class="built_in">Object</span> ();</span><br><span class="line">  objectA.prop1 = B;</span><br><span class="line">  objectB.prop2 = A;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// objectA和objectB通过自己的属性相互引用</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面例子中，这种问题导致函数执行完毕之后，objectA和objectB继续存在，它们的引用次数不为0，对应的内存空间无法回收，当函数多次调用时，导致大量内存空间无法回收，影响程序执行</p>
+<p><strong>如何解决？</strong></p>
+<p>对于这种情况，最好在不使用它们的时候手动断开两个对象之前的连接</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">objectA.prop1</span> = null<span class="comment">;</span></span><br><span class="line"><span class="attr">objectB.prop2</span> = null<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+
+<p>不过<strong>解除一个值的引用并不意味着自动回收该值的内存空间，解除引用的真正目的在于让值脱离执行环境，以便垃圾回收机制下次运行的时候将其回收</strong></p>
+<h2 id="GC算法的性能评估"><a href="#GC算法的性能评估" class="headerlink" title="GC算法的性能评估"></a>GC算法的性能评估</h2><h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><p>吞吐量就是单位时间内的处理能力。</p>
+<p>举个例子，对内存空间大小为SIZE的内存进行管理，要花费的时间为A，那么吞吐量为SIZE/A</p>
+<h3 id="最大暂停时间"><a href="#最大暂停时间" class="headerlink" title="最大暂停时间"></a>最大暂停时间</h3><p>GC算法在执行的过程中都会导致mutator暂停，最大暂停时间指的是因执行GC而暂停执行mutator的最长时间</p>
+<p><strong>注：</strong> mutator的实体就是应用程序</p>
+<h3 id="访问的局部性"><a href="#访问的局部性" class="headerlink" title="访问的局部性"></a>访问的局部性</h3><p>程序运行时，我们把所有的数据加载到内存中，当CPU访问数据时，把要使用的数据读取到缓存中去，同时把该数据附近的所有数据都一同读入缓存，从而压缩读取数据的时间。</p>
+<p>具有引用关系的对象之间通常很可能存在连续访问的情况，利用程序访问的局部性原理这一特性，把具有引用关系的对象安排在堆中较近的位置，就能在缓存中提高想要读取到数据的概率，令mutator告诉运行。</p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/GC/" rel="tag"># GC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/06/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -523,8 +718,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -541,7 +745,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -579,9 +783,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">1</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -615,6 +817,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GC机制-（先导篇）"><span class="nav-number">1.</span> <span class="nav-text">GC机制 （先导篇）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC的基础概念"><span class="nav-number">1.1.</span> <span class="nav-text">GC的基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GC的定义"><span class="nav-number">1.1.1.</span> <span class="nav-text">GC的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC的简介及历史"><span class="nav-number">1.1.2.</span> <span class="nav-text">GC的简介及历史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC的任务"><span class="nav-number">1.1.3.</span> <span class="nav-text">GC的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC的优点"><span class="nav-number">1.1.4.</span> <span class="nav-text">GC的优点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS常用的GC算法"><span class="nav-number">1.2.</span> <span class="nav-text">JS常用的GC算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记清除算法"><span class="nav-number">1.2.1.</span> <span class="nav-text">标记清除算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用计数算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">引用计数算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC算法的性能评估"><span class="nav-number">1.3.</span> <span class="nav-text">GC算法的性能评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#吞吐量"><span class="nav-number">1.3.1.</span> <span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最大暂停时间"><span class="nav-number">1.3.2.</span> <span class="nav-text">最大暂停时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问的局部性"><span class="nav-number">1.3.3.</span> <span class="nav-text">访问的局部性</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -791,6 +1010,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
 
   
 
@@ -820,9 +1043,28 @@
 </script>
 
 
+<script>
+  var disqus_config = function() {
+    this.page.url = "http://blog.fleetingtimer.top/2019/06/19/GC-brief-intro/";
+    this.page.identifier = "2019/06/19/GC-brief-intro/";
+    this.page.title = 'GC-brief-intro';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fleetingtimer.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
 
 
 
+
+
+  
 
 
   
@@ -1154,38 +1396,32 @@
   
   <script>
     
-    function showTime(Counter) {
-      var entries = [];
+    function addCount(Counter) {
       var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
 
-      $visitors.each(function() {
-        entries.push( $(this).attr('id').trim() );
-      });
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { '$in': entries } }) })
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
         .done(function({ results }) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.url;
-            var time = item.time;
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for (var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if (countSpan.text() == '') {
-              countSpan.text(0);
-            }
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
         })
         .fail(function ({ responseJSON }) {
@@ -1210,9 +1446,7 @@
             });
           };
           
-            if ($('.post-title-link').length >= 1) {
-              showTime(Counter);
-            }
+            addCount(Counter);
           
         });
     });
@@ -1261,7 +1495,7 @@
   <script src="/lib/bookmark/bookmark.min.js?v=1.0"></script>
   <script>
   
-    bookmark.loadBookmark();
+    bookmark.scrollToMark('auto', "#more");
   
   </script>
 
