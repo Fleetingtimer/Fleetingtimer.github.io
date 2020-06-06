@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.fleetingtimer.top/"/>
-  <updated>2019-06-18T17:52:50.748Z</updated>
+  <updated>2020-06-06T14:47:10.857Z</updated>
   <id>http://blog.fleetingtimer.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>java 内部类</title>
+    <link href="http://blog.fleetingtimer.top/2020/06/06/Inner-class-intro/"/>
+    <id>http://blog.fleetingtimer.top/2020/06/06/Inner-class-intro/</id>
+    <published>2020-06-06T14:34:42.000Z</published>
+    <updated>2020-06-06T14:47:10.857Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h1 id=&quot;内部类&quot;&gt;&lt;a href=&quot;#内部类&quot; class=&quot;headerlink&quot; title=&quot;内部类&quot;&gt;&lt;/a&gt;内部类&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;&lt;h2 id=&quot;内部类是什么&quot;&gt;&lt;a href=&quot;#内部类是什么&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="java" scheme="http://blog.fleetingtimer.top/categories/java/"/>
+    
+    
+      <category term="class" scheme="http://blog.fleetingtimer.top/tags/class/"/>
+    
+  </entry>
   
   <entry>
     <title>详解GC-先导篇</title>
