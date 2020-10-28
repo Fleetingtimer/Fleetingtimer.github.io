@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.fleetingtimer.top/"/>
-  <updated>2019-06-18T17:52:50.748Z</updated>
+  <updated>2020-10-28T07:40:26.783Z</updated>
   <id>http://blog.fleetingtimer.top/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Leetcode-876. Middle of the Linked List</title>
+    <link href="http://blog.fleetingtimer.top/2020/10/28/Leetcode-876-Middle-of-the-Linked-List/"/>
+    <id>http://blog.fleetingtimer.top/2020/10/28/Leetcode-876-Middle-of-the-Linked-List/</id>
+    <published>2020-10-28T07:28:13.000Z</published>
+    <updated>2020-10-28T07:40:26.783Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这篇文章主要是记录个人对Leetcode-876. Middle of the Linked List题目相关的解题思路的分析以及给出基于不同编程的语言的具体实现，同时也会对题目做相应改动扩展并给出解决方案，提升个人编程思维能力及复习多门编程语言相关语法…&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://blog.fleetingtimer.top/categories/Algorithm/"/>
+    
+    
+      <category term="Linked List" scheme="http://blog.fleetingtimer.top/tags/Linked-List/"/>
+    
+  </entry>
   
   <entry>
     <title>详解GC-先导篇</title>
