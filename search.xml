@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>2020-10-24-Daily-Review</title>
-    <url>/2020/10/24/Daily-Review/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>详解GC-先导篇</title>
     <url>/2019/06/19/GC-brief-intro/</url>
     <content><![CDATA[<p>这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…</p>
