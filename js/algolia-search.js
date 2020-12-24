@@ -1,128 +1,114 @@
-/* global instantsearch, algoliasearch, CONFIG */
+/* global instantsearch, CONFIG */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const { indexName, appID, apiKey, hits } = CONFIG.algolia;
+$(document).ready(function() {
+  var algoliaSettings = CONFIG.algolia;
+  var isAlgoliaSettingsValid = algoliaSettings.applicationID
+                            && algoliaSettings.apiKey
+                            && algoliaSettings.indexName;
 
-  const search = instantsearch({
-    indexName,
-    searchClient  : algoliasearch(appID, apiKey),
-    searchFunction: helper => {
-      if (document.querySelector('.search-input').value) {
+  if (!isAlgoliaSettingsValid) {
+    window.console.error('Algolia Settings are invalid.');
+    return;
+  }
+
+  var search = instantsearch({
+    appId         : algoliaSettings.applicationID,
+    apiKey        : algoliaSettings.apiKey,
+    indexName     : algoliaSettings.indexName,
+    searchFunction: function(helper) {
+      var searchInput = $('#algolia-search-input').find('input');
+
+      if (searchInput.val()) {
         helper.search();
       }
     }
   });
 
-  window.pjax && search.on('render', () => {
-    window.pjax.refresh(document.querySelector('.algolia-hits'));
-  });
-
   // Registering Widgets
-  search.addWidgets([
-    instantsearch.widgets.configure({
-      hitsPerPage: hits.per_page || 10
+  [
+    instantsearch.widgets.searchBox({
+      container  : '#algolia-search-input',
+      placeholder: algoliaSettings.labels.input_placeholder
     }),
 
-    instantsearch.widgets.searchBox({
-      container           : '.search-input-container',
-      placeholder         : CONFIG.i18n.placeholder,
-      // Hide default icons of algolia search
-      showReset           : false,
-      showSubmit          : false,
-      showLoadingIndicator: false,
-      cssClasses          : {
-        input: 'search-input'
+    instantsearch.widgets.hits({
+      container  : '#algolia-hits',
+      hitsPerPage: algoliaSettings.hits.per_page || 10,
+      templates  : {
+        item: function(data) {
+          var link = data.permalink ? data.permalink : CONFIG.root + data.path;
+          return (
+            '<a href="' + link + '" class="algolia-hit-item-link">'
+          + data._highlightResult.title.value
+          + '</a>'
+          );
+        },
+        empty: function(data) {
+          return (
+            '<div id="algolia-hits-empty">'
+          + algoliaSettings.labels.hits_empty.replace(/\$\{query}/, data.query)
+          + '</div>'
+          );
+        }
+      },
+      cssClasses: {
+        item: 'algolia-hit-item'
       }
     }),
 
     instantsearch.widgets.stats({
-      container: '.algolia-stats',
+      container: '#algolia-stats',
       templates: {
-        text: data => {
-          const stats = CONFIG.i18n.hits_time
+        body: function(data) {
+          var stats = algoliaSettings.labels.hits_stats
             .replace(/\$\{hits}/, data.nbHits)
             .replace(/\$\{time}/, data.processingTimeMS);
-          return `<span>${stats}</span>
-            <img src="${CONFIG.images}/logo-algolia-nebula-blue-full.svg" alt="Algolia">`;
+          return (
+            stats
+            + '<span class="algolia-powered">'
+            + '  <img src="' + CONFIG.root + 'images/algolia_logo.svg" alt="Algolia" />'
+            + '</span>'
+            + '<hr />'
+          );
         }
-      },
-      cssClasses: {
-        text: 'search-stats'
-      }
-    }),
-
-    instantsearch.widgets.hits({
-      container : '.algolia-hits',
-      escapeHTML: false,
-      templates : {
-        item: data => {
-          const { title, excerpt, excerptStrip, contentStripTruncate } = data._highlightResult;
-          let result = `<a href="${data.permalink}" class="search-result-title">${title.value}</a>`;
-          const content = excerpt || excerptStrip || contentStripTruncate;
-          if (content && content.value) {
-            const div = document.createElement('div');
-            div.innerHTML = content.value;
-            result += `<a href="${data.permalink}"><p class="search-result">${div.textContent.substr(0, 100)}...</p></a>`;
-          }
-          return result;
-        },
-        empty: data => {
-          return `<div id="algolia-hits-empty">
-              ${CONFIG.i18n.empty.replace(/\$\{query}/, data.query)}
-            </div>`;
-        }
-      },
-      cssClasses: {
-        list: 'search-result-list'
       }
     }),
 
     instantsearch.widgets.pagination({
-      container: '.algolia-pagination',
-      scrollTo : false,
-      showFirst: false,
-      showLast : false,
-      templates: {
+      container    : '#algolia-pagination',
+      scrollTo     : false,
+      showFirstLast: false,
+      labels       : {
         first   : '<i class="fa fa-angle-double-left"></i>',
         last    : '<i class="fa fa-angle-double-right"></i>',
         previous: '<i class="fa fa-angle-left"></i>',
         next    : '<i class="fa fa-angle-right"></i>'
       },
       cssClasses: {
-        list        : ['pagination', 'algolia-pagination'],
-        item        : 'pagination-item',
-        link        : 'page-number',
-        selectedItem: 'current',
-        disabledItem: 'disabled-item'
+        root    : 'pagination',
+        item    : 'pagination-item',
+        link    : 'page-number',
+        active  : 'current',
+        disabled: 'disabled-item'
       }
     })
-  ]);
+  ].forEach(search.addWidget, search);
 
   search.start();
 
-  // Handle and trigger popup window
-  document.querySelectorAll('.popup-trigger').forEach(element => {
-    element.addEventListener('click', () => {
-      document.body.classList.add('search-active');
-      setTimeout(() => document.querySelector('.search-input').focus(), 500);
-    });
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body')
+      .append('<div class="search-popup-overlay algolia-pop-overlay"></div>')
+      .css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
   });
 
-  // Monitor main search box
-  const onPopupClose = () => {
-    document.body.classList.remove('search-active');
-  };
+  $('.popup-btn-close').click(function() {
+    $('.popup').hide();
+    $('.algolia-pop-overlay').remove();
+    $('body').css('overflow', '');
+  });
 
-  document.querySelector('.search-pop-overlay').addEventListener('click', event => {
-    if (event.target === document.querySelector('.search-pop-overlay')) {
-      onPopupClose();
-    }
-  });
-  document.querySelector('.popup-btn-close').addEventListener('click', onPopupClose);
-  document.addEventListener('pjax:success', onPopupClose);
-  window.addEventListener('keyup', event => {
-    if (event.key === 'Escape') {
-      onPopupClose();
-    }
-  });
 });

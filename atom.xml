@@ -25,7 +25,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;这篇文章主要是记录个人对Leetcode-876. Middle of the Linked List题目相关的解题思路的分析以及给出基于不同编程的语言的具体实现，同时也会对题目做相应改动扩展并给出解决方案，提升个人编程思维能力及复习多门编程语言相关语法…&lt;/p&gt;
+      &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;这篇文章主要是记录个人对Leetcode-876. Middle of the Linked List题目相关的解题思路的分析以及给出基于不同编程的语言的具体实现，同时也会对题目做相应改动扩展并给出解决方案，提升个人编程思维能力及复习多门编程语言相关语法…&lt;/p&gt;
     
     </summary>
     
@@ -45,7 +45,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…&lt;/p&gt;
+      &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;p&gt;这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…&lt;/p&gt;
     
     </summary>
     

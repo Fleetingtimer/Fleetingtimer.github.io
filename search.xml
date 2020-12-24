@@ -1,69 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>详解GC-先导篇</title>
-    <url>/2019/06/19/GC-brief-intro/</url>
-    <content><![CDATA[<p>这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…</p>
-<a id="more"></a>
-<h1 id="GC机制-（先导篇）"><a href="#GC机制-（先导篇）" class="headerlink" title="GC机制 （先导篇）"></a>GC机制 （先导篇）</h1><h2 id="GC的基础概念"><a href="#GC的基础概念" class="headerlink" title="GC的基础概念"></a>GC的基础概念</h2><h3 id="GC的定义"><a href="#GC的定义" class="headerlink" title="GC的定义"></a>GC的定义</h3><blockquote>
-<p>GC是Garbage Collection的简称，中文我们称之为垃圾回收</p>
-</blockquote>
-<p>​    在GC中，我们把程序中不用的内存空间称之为垃圾</p>
-<h3 id="GC的简介及历史"><a href="#GC的简介及历史" class="headerlink" title="GC的简介及历史"></a>GC的简介及历史</h3><p>​    对于大多数编程语言，已经内置了垃圾回收机制（比如Java，JavaScript，Python），比较早期的编程语言比如C lang 和C plus 这两门语言需要编程人员进行内存管理，即需要显式进行内存的申请及手动的内存销毁。</p>
-<p>​    GC这一概念最早由Lisp之父John McCarthy在1960年在论文中提出，这篇论文主要设计到后面要描述的GC算法-标记清除算法，后续其它计算机人员又相继提出了引用计数算法，GC复制算法。之后的几十年到当代为人所知的算法，不过都是前面三种GC算法的组合应用衍生出的产物而已。目前主要介绍JS中最常用的两种GC算法</p>
-<h3 id="GC的任务"><a href="#GC的任务" class="headerlink" title="GC的任务"></a>GC的任务</h3><ol>
-<li>找到内存空间中的垃圾</li>
-<li>回收垃圾，让内存空间重新得到利用</li>
-</ol>
-<h3 id="GC的优点"><a href="#GC的优点" class="headerlink" title="GC的优点"></a>GC的优点</h3><ul>
-<li><p>程序员无需手动进行内存管理，可以集中精力于编程工作</p>
-</li>
-<li><p>减少与内存相关Bug的出现（内存泄漏，垂悬指针）</p>
-</li>
-</ul>
-<h2 id="JS常用的GC算法"><a href="#JS常用的GC算法" class="headerlink" title="JS常用的GC算法"></a>JS常用的GC算法</h2><h3 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h3><p>JavaScript中最常用的垃圾收集方式就是标记清除。</p>
-<p>当变量进入环境时（如函数中某个变量的声明），就将此变量标记为进入环境，当变量离开环境（如函数执行完毕），就将变量标记为离开环境。变量的具体标记方法在后续的文章会进行详细介绍，此处不必关注具体的标记方式。</p>
-<p>JS中垃圾收集器会在运行时给内存中所有的变量进行标记，然后，它会去掉环境中的变量以及被环境中的变量引用的变量的标记，并在此之后加上被加上标记的变量，把这些视为准备删除的变量，然后垃圾收集器完成内存清除工作</p>
-<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ol>
-<li>效率问题，标记和清除过程的效率都不高</li>
-<li>空间问题，会产生大量不连续的内存碎片，导致当程序需要更大的内存空间时，不得不提前触发下一次垃圾回收操作</li>
-</ol>
-<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>Javascript中另一种不常见的垃圾收集策略叫做引用计数算法。</p>
-<p>引用计数，顾名思义，跟踪记录每个值的被引用次数。例如将一个引用数据类型的值赋值给一个变量，则这个值的引用次数就为1，当把这个值赋给其它更多的变量时，值的引用次数依次增加，同时对于这个值的引用的变量取得另一个引用的值，当前这个值引用次数减1，当某个值的引用次数为0时，说明在内存中没有变量可以访问到这块内存空间的值，当垃圾收集器下次运行的时候，就会引用次数为0的值内存空间进行释放。</p>
-<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>引用计数算法在提出之后，后续有学者指出其存在一定的缺点，即它无法回收循环引用</p>
-<p><strong>什么是循环引用？</strong>，请看下面示例</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> objectA = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">  <span class="keyword">const</span> object B =  <span class="keyword">new</span> <span class="built_in">Object</span> ();</span><br><span class="line">  objectA.prop1 = B;</span><br><span class="line">  objectB.prop2 = A;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// objectA和objectB通过自己的属性相互引用</span></span><br></pre></td></tr></table></figure>
-<p>在上面例子中，这种问题导致函数执行完毕之后，objectA和objectB继续存在，它们的引用次数不为0，对应的内存空间无法回收，当函数多次调用时，导致大量内存空间无法回收，影响程序执行</p>
-<p><strong>如何解决？</strong></p>
-<p>对于这种情况，最好在不使用它们的时候手动断开两个对象之前的连接</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">objectA.prop1</span> = null<span class="comment">;</span></span><br><span class="line"><span class="attr">objectB.prop2</span> = null<span class="comment">;</span></span><br></pre></td></tr></table></figure>
-<p>不过<strong>解除一个值的引用并不意味着自动回收该值的内存空间，解除引用的真正目的在于让值脱离执行环境，以便垃圾回收机制下次运行的时候将其回收</strong></p>
-<h2 id="GC算法的性能评估"><a href="#GC算法的性能评估" class="headerlink" title="GC算法的性能评估"></a>GC算法的性能评估</h2><h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><p>吞吐量就是单位时间内的处理能力。</p>
-<p>举个例子，对内存空间大小为SIZE的内存进行管理，要花费的时间为A，那么吞吐量为SIZE/A</p>
-<h3 id="最大暂停时间"><a href="#最大暂停时间" class="headerlink" title="最大暂停时间"></a>最大暂停时间</h3><p>GC算法在执行的过程中都会导致mutator暂停，最大暂停时间指的是因执行GC而暂停执行mutator的最长时间</p>
-<p><strong>注：</strong> mutator的实体就是应用程序</p>
-<h3 id="访问的局部性"><a href="#访问的局部性" class="headerlink" title="访问的局部性"></a>访问的局部性</h3><p>程序运行时，我们把所有的数据加载到内存中，当CPU访问数据时，把要使用的数据读取到缓存中去，同时把该数据附近的所有数据都一同读入缓存，从而压缩读取数据的时间。</p>
-<p>具有引用关系的对象之间通常很可能存在连续访问的情况，利用程序访问的局部性原理这一特性，把具有引用关系的对象安排在堆中较近的位置，就能在缓存中提高想要读取到数据的概率，令mutator告诉运行。</p>
-]]></content>
-      <categories>
-        <category>Basic</category>
-      </categories>
-      <tags>
-        <tag>GC</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Leetcode-876. Middle of the Linked List</title>
     <url>/2020/10/28/Leetcode-876-Middle-of-the-Linked-List/</url>
-    <content><![CDATA[<p>这篇文章主要是记录个人对Leetcode-876. Middle of the Linked List题目相关的解题思路的分析以及给出基于不同编程的语言的具体实现，同时也会对题目做相应改动扩展并给出解决方案，提升个人编程思维能力及复习多门编程语言相关语法…</p>
+    <content><![CDATA[<html><head></head><body><p>这篇文章主要是记录个人对Leetcode-876. Middle of the Linked List题目相关的解题思路的分析以及给出基于不同编程的语言的具体实现，同时也会对题目做相应改动扩展并给出解决方案，提升个人编程思维能力及复习多门编程语言相关语法…</p>
 <a id="more"></a>
 
 <h3 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h3><p>Given a non-empty, singly linked list with head node <code>head</code>, return a middle node of linked list.</p>
 <p>If there are two middle nodes, return the second middle node.</p>
 <p><strong>Example 1:</strong></p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">Input: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">Output: <span class="keyword">Node</span> <span class="title">3</span> from this list (Serialization: [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">The returned <span class="keyword">node</span> <span class="title">has</span> value <span class="number">3</span>.  (The judge&#x27;s serialization of this <span class="keyword">node</span> <span class="title">is</span> [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]).</span><br><span class="line">Note that we returned a ListNode object ans, such that:</span><br><span class="line">ans.val = <span class="number">3</span>, ans.next.val = <span class="number">4</span>, ans.next.next.val = <span class="number">5</span>, <span class="keyword">and</span> ans.next.next.next = NULL.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight crmsh"><table><tbody><tr><td class="code"><pre><span class="line">Input: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">Output: <span class="keyword">Node</span> <span class="title">3</span> from this list (Serialization: [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">The returned <span class="keyword">node</span> <span class="title">has</span> value <span class="number">3</span>.  (The judge's serialization of this <span class="keyword">node</span> <span class="title">is</span> [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]).</span><br><span class="line">Note that we returned a ListNode object ans, such that:</span><br><span class="line">ans.val = <span class="number">3</span>, ans.next.val = <span class="number">4</span>, ans.next.next.val = <span class="number">5</span>, <span class="keyword">and</span> ans.next.next.next = NULL.</span><br></pre></td></tr></tbody></table></figure>
+
 <p><strong>Example 2:</strong></p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">Input: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">Output: Node <span class="number">4</span> <span class="built_in">from</span> this list (Serialization: [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line">Since <span class="keyword">the</span> list has <span class="literal">two</span> <span class="keyword">middle</span> nodes <span class="keyword">with</span> values <span class="number">3</span> <span class="keyword">and</span> <span class="number">4</span>, we <span class="literal">return</span> <span class="keyword">the</span> <span class="keyword">second</span> <span class="literal">one</span>.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tbody><tr><td class="code"><pre><span class="line">Input: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">Output: Node <span class="number">4</span> <span class="keyword">from</span> <span class="keyword">this</span> list (Serialization: [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line">Since the list has two middle nodes with values <span class="number">3</span> <span class="keyword">and</span> <span class="number">4</span>, we <span class="keyword">return</span> the second one.</span><br></pre></td></tr></tbody></table></figure>
+
 <p><strong>Note:</strong></p>
 <ul>
 <li>The number of nodes in the given list will be between <code>1</code> and <code>100</code>.</li>
@@ -82,7 +32,7 @@
 </li>
 <li><p>再以偶数链表[1, 2, 3, 4, 5, 6]进行分析，head节点为1，最终需要获取节点为4， 遍历次数N为3</p>
 <p>通过对两种链表进行分析我们不难总结出以下规律(假设链表长度为M):</p>
-<p>N =  向下取整(M &gt;&gt; 1 )  或者 N =  向下取整(M / 2 )  </p>
+<p>N =  向下取整(M >> 1 )  或者 N =  向下取整(M / 2 )  </p>
 <p>接下来，我们按照N长度进行遍历即可。</p>
 <p>复杂度分析：</p>
 </li>
@@ -111,35 +61,94 @@
 </ul>
 <p><strong>Hint:</strong></p>
 <p>计算N值的时候，向下取整我们可以使用各个语言提供的数学函数，例如js中的Math.floor()。另外一个计算方法则是判断M的奇偶性，当M为奇数是 N =  (M - 1) / 2 , M 为偶数时 N = M / 2 </p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> N = (M &amp; <span class="number">1</span>) === <span class="number">0</span> ? M &gt;&gt; <span class="number">1</span> : (M - <span class="number">1</span>) &gt;&gt; <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight jsx"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> N = (M & <span class="number">1</span>) === <span class="number">0</span> ? M >> <span class="number">1</span> : (M - <span class="number">1</span>) >> <span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+
 <p>这里稍微要注意一下的是我们判断奇偶和除以2采用的都是位运算, 同时要注意位运算优先级较低，最好使用括号扩起来。</p>
 <h3 id="Enhance"><a href="#Enhance" class="headerlink" title="Enhance"></a>Enhance</h3><p>假设我们调整一下问题的输出要求，链表长度为奇数时输出不变，链表长度为偶数时，输出靠近链表头部的中间节点，我们又该怎么处理呢？</p>
 <p>对于第一种方案和第二种方案处理起来很简单，请重点思考一下基于第三种方案的变动处理</p>
 <h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><p>Javascript</p>
-<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * function ListNode(val, next) &#123;</span></span><br><span class="line"><span class="comment"> *     this.val = (val===undefined ? 0 : val)</span></span><br><span class="line"><span class="comment"> *     this.next = (next===undefined ? null : next)</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;ListNode&#125;</span> <span class="variable">head</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;ListNode&#125;</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> middleNode = <span class="function"><span class="keyword">function</span>(<span class="params">head</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> cur = head;</span><br><span class="line">    <span class="keyword">const</span> list_len = listNodeLength(head)</span><br><span class="line">    <span class="keyword">let</span> iter_len = (list_len &amp; <span class="number">1</span>) === <span class="number">0</span> ? list_len &gt;&gt; <span class="number">1</span> : (list_len - <span class="number">1</span>) &gt;&gt; <span class="number">1</span>; </span><br><span class="line">    <span class="keyword">while</span>(iter_len) &#123;</span><br><span class="line">        cur = cur.next;</span><br><span class="line">        iter_len--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> cur;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> listNodeLength = <span class="function"><span class="keyword">function</span>(<span class="params">head</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> cur = head;</span><br><span class="line">    <span class="keyword">while</span>(cur) &#123;</span><br><span class="line">        cur = cur.next;</span><br><span class="line">        count++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight jsx"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * function ListNode(val, next) {</span></span><br><span class="line"><span class="comment"> *     this.val = (val===undefined ? 0 : val)</span></span><br><span class="line"><span class="comment"> *     this.next = (next===undefined ? null : next)</span></span><br><span class="line"><span class="comment"> * }</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @param {ListNode} head</span></span><br><span class="line"><span class="comment"> * @return {ListNode}</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> middleNode = <span class="function"><span class="keyword">function</span>(<span class="params">head</span>) </span>{</span><br><span class="line">    <span class="keyword">let</span> cur = head;</span><br><span class="line">    <span class="keyword">const</span> list_len = listNodeLength(head)</span><br><span class="line">    <span class="keyword">let</span> iter_len = (list_len & <span class="number">1</span>) === <span class="number">0</span> ? list_len >> <span class="number">1</span> : (list_len - <span class="number">1</span>) >> <span class="number">1</span>; </span><br><span class="line">    <span class="keyword">while</span>(iter_len) {</span><br><span class="line">        cur = cur.next;</span><br><span class="line">        iter_len--;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> cur;</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> listNodeLength = <span class="function"><span class="keyword">function</span>(<span class="params">head</span>) </span>{</span><br><span class="line">    <span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> cur = head;</span><br><span class="line">    <span class="keyword">while</span>(cur) {</span><br><span class="line">        cur = cur.next;</span><br><span class="line">        count++;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
 <p>Python2</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"># class ListNode(object):</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, next=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.next = next</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">middleNode</span>(<span class="params">self, head</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">listNodeLength</span>(<span class="params">head</span>):</span></span><br><span class="line">            count = <span class="number">0</span></span><br><span class="line">            cur = head</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                cur = cur.<span class="built_in">next</span></span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> count</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># length = listNodeLength(head)</span></span><br><span class="line">        cur = head</span><br><span class="line">        <span class="comment"># iter_length = length &gt;&gt; 1 if (length &amp; 1) == 0 else (length - 1) &gt;&gt; 1</span></span><br><span class="line">				iter_length = listNodeLength(head) // <span class="number">2</span></span><br><span class="line">        <span class="keyword">while</span> iter_length:</span><br><span class="line">            cur = cur.<span class="built_in">next</span></span><br><span class="line">            iter_length -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> cur</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"># class ListNode(object):</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, next=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.next = next</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">middleNode</span><span class="params">(self, head)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type head: ListNode</span></span><br><span class="line"><span class="string">        :rtype: ListNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">listNodeLength</span><span class="params">(head)</span>:</span></span><br><span class="line">            count = <span class="number">0</span></span><br><span class="line">            cur = head</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                cur = cur.next</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> count</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># length = listNodeLength(head)</span></span><br><span class="line">        cur = head</span><br><span class="line">        <span class="comment"># iter_length = length >> 1 if (length & 1) == 0 else (length - 1) >> 1</span></span><br><span class="line">				iter_length = listNodeLength(head) // <span class="number">2</span></span><br><span class="line">        <span class="keyword">while</span> iter_length:</span><br><span class="line">            cur = cur.next</span><br><span class="line">            iter_length -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> cur</span><br></pre></td></tr></tbody></table></figure>
+
 <p>注意事项：</p>
 <ol>
 <li>python中没有++， — 这两种运算符 我们可以使用 += 1，-= 1</li>
-<li>python 中没有三目运算符 即  <code>a &gt; b ? c : d</code>    但是我们可以使用 <code>c if a &lt; b else d</code> 来代替</li>
-<li>python 单行注释使用的是<code>#</code> ，多行注释使用的是 <code>&#39;&#39;&#39; &#39;&#39;&#39;</code> 或 <code>&quot;&quot;&quot; &quot;&quot;&quot;</code>  （PS: 好久没使用py，都忘记了 😭，习惯性使用 <code>//</code>）</li>
+<li>python 中没有三目运算符 即  <code>a > b ? c : d</code>    但是我们可以使用 <code>c if a < b else d</code> 来代替</li>
+<li>python 单行注释使用的是<code>#</code> ，多行注释使用的是 <code>''' '''</code> 或 <code>""" """</code>  （PS: 好久没使用py，都忘记了 😭，习惯性使用 <code>//</code>）</li>
 </ol>
 <p>Python3</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"># class ListNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, next=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.next = next</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">middleNode</span>(<span class="params">self, head: ListNode</span>) -&gt; ListNode:</span></span><br><span class="line">				fast = slow = head;</span><br><span class="line">				<span class="keyword">while</span> fast <span class="keyword">and</span> fast.<span class="built_in">next</span>:</span><br><span class="line">						fast = fast.<span class="built_in">next</span>.<span class="built_in">next</span></span><br><span class="line">						slow = slow.<span class="built_in">next</span></span><br><span class="line">				<span class="keyword">return</span> slow</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"># class ListNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, next=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.next = next</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">		<span class="function"><span class="keyword">def</span> <span class="title">middleNode</span><span class="params">(self, head: ListNode)</span> -> ListNode:</span></span><br><span class="line">				fast = slow = head;</span><br><span class="line">				<span class="keyword">while</span> fast <span class="keyword">and</span> fast.next:</span><br><span class="line">						fast = fast.next.next</span><br><span class="line">						slow = slow.next</span><br><span class="line">				<span class="keyword">return</span> slow</span><br></pre></td></tr></tbody></table></figure>
+
 <p>注意事项：</p>
 <ol>
-<li>python中的与，或，非是 and, or, not 和其它编程语言 &amp;&amp;， ||，! 相对应</li>
+<li>python中的与，或，非是 and, or, not 和其它编程语言 &&， ||，! 相对应</li>
 </ol>
 <p>Go Enhance 输出版本</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * type ListNode struct &#123;</span></span><br><span class="line"><span class="comment"> *     Val int</span></span><br><span class="line"><span class="comment"> *     Next *ListNode</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">middleNode</span><span class="params">(head *ListNode)</span> *<span class="title">ListNode</span></span> &#123;</span><br><span class="line">    preHead := &amp;ListNode &#123;</span><br><span class="line">			  <span class="number">0</span>,</span><br><span class="line">		    head,</span><br><span class="line">    &#125;;</span><br><span class="line">    fast, slow := preHead, preHead;</span><br><span class="line">    <span class="keyword">for</span> fast != <span class="literal">nil</span> &amp;&amp; fast.Next != <span class="literal">nil</span> &#123;</span><br><span class="line">        fast = fast.Next.Next;</span><br><span class="line">        slow = slow.Next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * type ListNode struct {</span></span><br><span class="line"><span class="comment"> *     Val int</span></span><br><span class="line"><span class="comment"> *     Next *ListNode</span></span><br><span class="line"><span class="comment"> * }</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">middleNode</span><span class="params">(head *ListNode)</span> *<span class="title">ListNode</span></span> {</span><br><span class="line">    preHead := &ListNode {</span><br><span class="line">			  <span class="number">0</span>,</span><br><span class="line">		    head,</span><br><span class="line">    };</span><br><span class="line">    fast, slow := preHead, preHead;</span><br><span class="line">    <span class="keyword">for</span> fast != <span class="literal">nil</span> && fast.Next != <span class="literal">nil</span> {</span><br><span class="line">        fast = fast.Next.Next;</span><br><span class="line">        slow = slow.Next;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
 <p>此处的解决方案是在head节点之前增加一个哨兵节点，然后从哨兵节点处开始遍历，即可得到我们所需的结果</p>
-]]></content>
+</body></html>]]></content>
       <categories>
         <category>Algorithm</category>
       </categories>
       <tags>
         <tag>Linked List</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>详解GC-先导篇</title>
+    <url>/2019/06/19/GC-brief-intro/</url>
+    <content><![CDATA[<html><head></head><body><p>这篇文章对GC做一个简要的介绍，主要涉及到GC的基础知识点，以及常用的GC算法的原理性描述及存在的缺点，对于部分算法我们会给出相应的解决方案。最后我们讲述如何对GC算法进行性能评估…</p>
+<a id="more"></a>
+<h1 id="GC机制-（先导篇）"><a href="#GC机制-（先导篇）" class="headerlink" title="GC机制 （先导篇）"></a>GC机制 （先导篇）</h1><h2 id="GC的基础概念"><a href="#GC的基础概念" class="headerlink" title="GC的基础概念"></a>GC的基础概念</h2><h3 id="GC的定义"><a href="#GC的定义" class="headerlink" title="GC的定义"></a>GC的定义</h3><blockquote>
+<p>GC是Garbage Collection的简称，中文我们称之为垃圾回收</p>
+</blockquote>
+<p>​    在GC中，我们把程序中不用的内存空间称之为垃圾</p>
+<h3 id="GC的简介及历史"><a href="#GC的简介及历史" class="headerlink" title="GC的简介及历史"></a>GC的简介及历史</h3><p>​    对于大多数编程语言，已经内置了垃圾回收机制（比如Java，JavaScript，Python），比较早期的编程语言比如C lang 和C plus 这两门语言需要编程人员进行内存管理，即需要显式进行内存的申请及手动的内存销毁。</p>
+<p>​    GC这一概念最早由Lisp之父John McCarthy在1960年在论文中提出，这篇论文主要设计到后面要描述的GC算法-标记清除算法，后续其它计算机人员又相继提出了引用计数算法，GC复制算法。之后的几十年到当代为人所知的算法，不过都是前面三种GC算法的组合应用衍生出的产物而已。目前主要介绍JS中最常用的两种GC算法</p>
+<h3 id="GC的任务"><a href="#GC的任务" class="headerlink" title="GC的任务"></a>GC的任务</h3><ol>
+<li>找到内存空间中的垃圾</li>
+<li>回收垃圾，让内存空间重新得到利用</li>
+</ol>
+<h3 id="GC的优点"><a href="#GC的优点" class="headerlink" title="GC的优点"></a>GC的优点</h3><ul>
+<li><p>程序员无需手动进行内存管理，可以集中精力于编程工作</p>
+</li>
+<li><p>减少与内存相关Bug的出现（内存泄漏，垂悬指针）</p>
+</li>
+</ul>
+<h2 id="JS常用的GC算法"><a href="#JS常用的GC算法" class="headerlink" title="JS常用的GC算法"></a>JS常用的GC算法</h2><h3 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h3><p>JavaScript中最常用的垃圾收集方式就是标记清除。</p>
+<p>当变量进入环境时（如函数中某个变量的声明），就将此变量标记为进入环境，当变量离开环境（如函数执行完毕），就将变量标记为离开环境。变量的具体标记方法在后续的文章会进行详细介绍，此处不必关注具体的标记方式。</p>
+<p>JS中垃圾收集器会在运行时给内存中所有的变量进行标记，然后，它会去掉环境中的变量以及被环境中的变量引用的变量的标记，并在此之后加上被加上标记的变量，把这些视为准备删除的变量，然后垃圾收集器完成内存清除工作</p>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ol>
+<li>效率问题，标记和清除过程的效率都不高</li>
+<li>空间问题，会产生大量不连续的内存碎片，导致当程序需要更大的内存空间时，不得不提前触发下一次垃圾回收操作</li>
+</ol>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>Javascript中另一种不常见的垃圾收集策略叫做引用计数算法。</p>
+<p>引用计数，顾名思义，跟踪记录每个值的被引用次数。例如将一个引用数据类型的值赋值给一个变量，则这个值的引用次数就为1，当把这个值赋给其它更多的变量时，值的引用次数依次增加，同时对于这个值的引用的变量取得另一个引用的值，当前这个值引用次数减1，当某个值的引用次数为0时，说明在内存中没有变量可以访问到这块内存空间的值，当垃圾收集器下次运行的时候，就会引用次数为0的值内存空间进行释放。</p>
+<h4 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h4><p>引用计数算法在提出之后，后续有学者指出其存在一定的缺点，即它无法回收循环引用</p>
+<p><strong>什么是循环引用？</strong>，请看下面示例</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">const</span> objectA = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">  <span class="keyword">const</span> object B =  <span class="keyword">new</span> <span class="built_in">Object</span> ();</span><br><span class="line">  objectA.prop1 = B;</span><br><span class="line">  objectB.prop2 = A;</span><br><span class="line">}</span><br><span class="line"><span class="comment">// objectA和objectB通过自己的属性相互引用</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在上面例子中，这种问题导致函数执行完毕之后，objectA和objectB继续存在，它们的引用次数不为0，对应的内存空间无法回收，当函数多次调用时，导致大量内存空间无法回收，影响程序执行</p>
+<p><strong>如何解决？</strong></p>
+<p>对于这种情况，最好在不使用它们的时候手动断开两个对象之前的连接</p>
+<figure class="highlight ini"><table><tbody><tr><td class="code"><pre><span class="line"><span class="attr">objectA.prop1</span> = null<span class="comment">;</span></span><br><span class="line"><span class="attr">objectB.prop2</span> = null<span class="comment">;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>不过<strong>解除一个值的引用并不意味着自动回收该值的内存空间，解除引用的真正目的在于让值脱离执行环境，以便垃圾回收机制下次运行的时候将其回收</strong></p>
+<h2 id="GC算法的性能评估"><a href="#GC算法的性能评估" class="headerlink" title="GC算法的性能评估"></a>GC算法的性能评估</h2><h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><p>吞吐量就是单位时间内的处理能力。</p>
+<p>举个例子，对内存空间大小为SIZE的内存进行管理，要花费的时间为A，那么吞吐量为SIZE/A</p>
+<h3 id="最大暂停时间"><a href="#最大暂停时间" class="headerlink" title="最大暂停时间"></a>最大暂停时间</h3><p>GC算法在执行的过程中都会导致mutator暂停，最大暂停时间指的是因执行GC而暂停执行mutator的最长时间</p>
+<p><strong>注：</strong> mutator的实体就是应用程序</p>
+<h3 id="访问的局部性"><a href="#访问的局部性" class="headerlink" title="访问的局部性"></a>访问的局部性</h3><p>程序运行时，我们把所有的数据加载到内存中，当CPU访问数据时，把要使用的数据读取到缓存中去，同时把该数据附近的所有数据都一同读入缓存，从而压缩读取数据的时间。</p>
+<p>具有引用关系的对象之间通常很可能存在连续访问的情况，利用程序访问的局部性原理这一特性，把具有引用关系的对象安排在堆中较近的位置，就能在缓存中提高想要读取到数据的概率，令mutator告诉运行。</p>
+</body></html>]]></content>
+      <categories>
+        <category>Basic</category>
+      </categories>
+      <tags>
+        <tag>GC</tag>
       </tags>
   </entry>
 </search>
