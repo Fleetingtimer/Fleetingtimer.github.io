@@ -151,4 +151,40 @@
         <tag>GC</tag>
       </tags>
   </entry>
+  <entry>
+    <title>20201224-DailyReview</title>
+    <url>/2020/12/25/DailyReview/</url>
+    <content><![CDATA[<html><head></head><body><hr>
+<p>这篇文章主要是对今日在开发上碰到相关问题的总结回顾，主要涉及到的内容为DynamoDB的GSI的创建以及通过创建多个维度的GSI来满足不同查询条件下数据的读取,降低接口的返回延迟进而提升应用程序的响应…</p>
+<a id="more"></a>
+
+<h2 id="如何加速DynamoDB表创建全局二级索引的过程"><a href="#如何加速DynamoDB表创建全局二级索引的过程" class="headerlink" title="如何加速DynamoDB表创建全局二级索引的过程"></a>如何加速DynamoDB表创建全局二级索引的过程</h2><h3 id="为什么引入GSI"><a href="#为什么引入GSI" class="headerlink" title="为什么引入GSI"></a>为什么引入GSI</h3><p>基于公司实际的业务需求，随着DynamoDB数据原表数据量的剧增，通过原表进行条件检索数据的效率越来越低，于是我们基于相关的检索条件来构建GSI来提高数据检索效率。</p>
+<p>在使用数据库的时候，我们都知道随着数据量的增加，数据检索会变慢，一般我们如果要提高数据检索效率，都需要为检索条件创建数据库索引，通过为检索条件创建索引，可以快速定位到数据。索引对应的也是空间换时间的计算机思想。</p>
+<h3 id="如何设计引入GSI"><a href="#如何设计引入GSI" class="headerlink" title="如何设计引入GSI"></a>如何设计引入GSI</h3><p>首先我们对需要进行检索的项目属性进行分析，确定最适合作为GSI的主键值(属性对应的值越离散越适合作为索引的主键)，如果实际上检索条件比较多，同时有多个适合作为GSI的主键值，那我们可以根据实际情况创建多个GSI来满足多种条件下的数据检索需求。具体关于GSI的索引的详细设计可以参考文档: <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmF3cy5hbWF6b24uY29tL3poX2NuL2FtYXpvbmR5bmFtb2RiL2xhdGVzdC9kZXZlbG9wZXJndWlkZS9icC1pbmRleGVzLmh0bWw=" title="https://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/bp-indexes.html">AWS 二级索引最佳实践<i class="fa fa-external-link"></i></span></p>
+<h3 id="GSI的创建及相关问题"><a href="#GSI的创建及相关问题" class="headerlink" title="GSI的创建及相关问题"></a>GSI的创建及相关问题</h3><p>GSI的创建过程涉及到对原表数据的读取及索引表数据的写入，这里我们称呼原表和索引表的原因是在DynamoDB中，每一个GSI是有自己独立的读写容量的，不会影响到原表读写容量，也就是你可以把GSI看成是原表的数据副本(不一定是完整的数据副本，取决于投影属性的选取)，同时当原表数据发生写操作时，对应的数据也会及时更新到对应GSI中。</p>
+<p>如果在创建GSI的过程为其设置的WCU(写容量单位)较小，同时原表的数据量又比较大的情况下，整个GSI的创建完成过程周期很长。我们需要进行手动调整一下对应GSI的WCU（即使对原表设置了Auto Scaling)。关于如何GSI的WCU怎么设置比较合适呢？其实这一块AWS也提供了官方的解答方案，但是直接通过中文检索无法找到，我们这边后来也是通过英文检索才查询到对应的解答方案(aws 相关的文档解答虽然提供了多种语言版本，但是通过英文检索似乎还是最有效准确的)</p>
+<p><strong>相关参考链接：</strong><span class="exturl" data-url="aHR0cHM6Ly9hd3MuYW1hem9uLmNvbS9jbi9wcmVtaXVtc3VwcG9ydC9rbm93bGVkZ2UtY2VudGVyL2NyZWF0ZS1nc2ktZHluYW1vZGIv" title="https://aws.amazon.com/cn/premiumsupport/knowledge-center/create-gsi-dynamodb/">dynamodb全局二级索引创建加速<i class="fa fa-external-link"></i></span></p>
+<p>此外关于AWS各种服务的相关问题，可以参考访问<span class="exturl" data-url="aHR0cHM6Ly9hd3MuYW1hem9uLmNvbS9jbi9wcmVtaXVtc3VwcG9ydC9rbm93bGVkZ2UtY2VudGVyLw==" title="https://aws.amazon.com/cn/premiumsupport/knowledge-center/">AWS帮助中心<i class="fa fa-external-link"></i></span></p>
+<h2 id="如何创建多维度的GSI来满足不同的业务需求"><a href="#如何创建多维度的GSI来满足不同的业务需求" class="headerlink" title="如何创建多维度的GSI来满足不同的业务需求"></a>如何创建多维度的GSI来满足不同的业务需求</h2><p>这里我们以实际业务举例，首先我们有一个游戏赛事表，每个赛事项目包含了赛事相关具体信息，比如赛事起止时间，赛事奖励信息及其它赛事所需的配置信息。我们的用户可以参与赛事提交相关赛事作品，对应的表为赛事作品表，同时用户的赛事作品会按照一定数量的用户划分为多个赛事分组</p>
+<p>相关业务需求如下：</p>
+<ol>
+<li>用户主页需要获取用户的所有赛事作品列表，并按照作品的提交顺序从晚到早排序（倒序)</li>
+<li>在赛事完成页中会显示用户一段时间内完成的赛事列表，同时进入赛事详情页可以显示分属为同一组的其它所有用户赛事作品相关信息</li>
+<li>用户参与某一个赛事提交的赛事作品数量存在限制（作品数量可以为1个或者多个)</li>
+</ol>
+<p>基于上述的业务需求我们就可以在原表之上设计以下几个GSI:</p>
+<ol>
+<li>用户id(主键) 赛事作品创建时间(分区键) 全局二级索引</li>
+<li>赛事分组id(主键)  全局二级索引（分区键可以基于实际业务来确定是否需要设置)</li>
+<li>用户id(主键) 赛事id(分区键) 全局二级索引</li>
+</ol>
+<p>如果我们不设计GSI，只是基于原表进行各种数据过滤筛选，部分业务也是可以得到实现的，但是由于DynamoDB数据扫描相关限制，数据量一旦增多，需要对表扫描的次数也会增加，会对原表的读写容量单元产生巨大消耗</p>
+</body></html>]]></content>
+      <categories>
+        <category>DailyReview</category>
+      </categories>
+      <tags>
+        <tag>DynamoDB</tag>
+      </tags>
+  </entry>
 </search>
